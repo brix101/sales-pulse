@@ -1,4 +1,4 @@
-import db, { DB } from "@/db";
+import { DB } from "@/db";
 import fastify, { FastifyInstance } from "fastify";
 
 declare module "fastify" {
@@ -14,9 +14,14 @@ declare module "fastify" {
 
 /**
  * Creates a new Fastify server instance.
+ * @param {DB} options.db - The database instance.
  * @returns {Promise<FastifyInstance>} A new Fastify server instance.
  */
-export async function createServer(): Promise<FastifyInstance> {
+export async function createServer({
+  db,
+}: {
+  db: DB;
+}): Promise<FastifyInstance> {
   const server = fastify({
     logger: true,
   });

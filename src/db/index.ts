@@ -1,5 +1,7 @@
+import { Env } from "@/env";
 import { DefaultLogger, LogWriter, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
+import postgres from "postgres";
 
 import { logger } from "../utils/logger";
 import * as schema from "./schema";
@@ -10,17 +12,21 @@ class MyLogWriter implements LogWriter {
   }
 }
 
-const db = drizzle(process.env.DATABASE_URL, {
-  schema,
-  logger: new DefaultLogger({
-    writer: new MyLogWriter(),
-  }),
-  casing: "snake_case",
-});
+export async function initDB(url: Env["DATABASE_URL"]) {
+  const client = postgres(url);
+  const db = drizzle(client, {
+    schema,
+    logger: new DefaultLogger({
+      writer: new MyLogWriter(),
+    }),
+    casing: "snake_case",
+  });
 
-export async function ping() {
-  return db.execute(sql`SELECT 1`);
+  return { client, db };
 }
 
-export type DB = typeof db;
-export default db;
+export type DB = Awaited<ReturnType<typeof initDB>>["db"];
+
+export async function ping(db: DB) {
+  return db.execute(sql`SELECT 1`);
+}

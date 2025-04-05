@@ -1,5 +1,6 @@
-import db from "@/db";
+import { initDB } from "@/db";
 import { customers, products, sales, salesProducts } from "@/db/schema";
+import env from "@/env";
 import { faker } from "@faker-js/faker";
 
 import { logger } from "./logger";
@@ -10,6 +11,8 @@ const SALES_COUNT = 500;
 const SALES_MAX_PRODUCTS = 100;
 
 export async function seed() {
+  const { db, client } = await initDB(env.DATABASE_URL);
+
   logger.info("Seeding database");
 
   const newCustomers = await db
@@ -65,6 +68,9 @@ export async function seed() {
   );
 
   logger.info("Seeded database");
+
+  await client.end();
+  process.exit(0);
 }
 
 void seed();
