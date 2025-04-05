@@ -1,9 +1,16 @@
+import { ping } from "./db";
 import env from "./env";
 import { logger } from "./utils/logger";
 import { createServer } from "./utils/server";
 
 async function main() {
-  logger.info("Starting server...");
+  try {
+    await ping();
+    logger.info("database connected");
+  } catch (e) {
+    logger.error(e, "ping failed");
+    process.exit(1);
+  }
 
   const server = await createServer();
 
