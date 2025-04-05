@@ -1,4 +1,8 @@
-export default {
+/** @typedef {import("prettier").Config} PrettierConfig */
+/** @typedef {import("@ianvs/prettier-plugin-sort-imports").PluginConfig} SortImportsConfig */
+
+/** @type { PrettierConfig | SortImportsConfig } */
+const config = {
   singleQuote: false,
   trailingComma: "all",
   printWidth: 80,
@@ -18,3 +22,5 @@ export default {
   importOrderTypeScriptVersion: "5.0.0",
   importOrderCaseSensitive: false,
 };
+
+export default config;
