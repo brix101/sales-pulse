@@ -1,7 +1,7 @@
-import { Env } from "@/env";
 import { DefaultLogger, LogWriter, sql } from "drizzle-orm";
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 
+import { Env } from "@/env";
 import { logger } from "../utils/logger";
 import * as schema from "./schema";
 
