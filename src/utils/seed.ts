@@ -4,13 +4,18 @@ import { faker } from "@faker-js/faker";
 
 import { logger } from "./logger";
 
+const CUSTOMERS_COUNT = 500;
+const PRODUCTS_COUNT = 5000;
+const SALES_COUNT = 500;
+const SALES_MAX_PRODUCTS = 100;
+
 export async function seed() {
   logger.info("Seeding database");
 
   const newCustomers = await db
     .insert(customers)
     .values(
-      Array.from({ length: 500 }, () => ({
+      Array.from({ length: CUSTOMERS_COUNT }, () => ({
         name: faker.person.fullName().toLowerCase(),
         email: faker.internet.email().toLowerCase(),
       })),
@@ -20,7 +25,7 @@ export async function seed() {
   const newProducts = await db
     .insert(products)
     .values(
-      Array.from({ length: 5000 }, () => ({
+      Array.from({ length: PRODUCTS_COUNT }, () => ({
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         image: faker.image.url(),
@@ -32,7 +37,7 @@ export async function seed() {
   const newSales = await db
     .insert(sales)
     .values(
-      Array.from({ length: 500 }, () => ({
+      Array.from({ length: SALES_COUNT }, () => ({
         customerId: faker.helpers.arrayElement(newCustomers).id,
         // orderDate: faker.date.recent(),
         orderDate: faker.date.between({
@@ -44,11 +49,19 @@ export async function seed() {
     .returning();
 
   await db.insert(salesProducts).values(
-    Array.from({ length: faker.number.int({ min: 100, max: 1000 }) }, () => ({
-      saleId: faker.helpers.arrayElement(newSales).id,
-      productId: faker.helpers.arrayElement(newProducts).id,
-      quantity: faker.number.int({ min: 1, max: 100 }),
-    })),
+    Array.from(
+      {
+        length: faker.number.int({
+          min: 100,
+          max: SALES_MAX_PRODUCTS * SALES_COUNT,
+        }),
+      },
+      () => ({
+        saleId: faker.helpers.arrayElement(newSales).id,
+        productId: faker.helpers.arrayElement(newProducts).id,
+        quantity: faker.number.int({ min: 1, max: 100 }),
+      }),
+    ),
   );
 
   logger.info("Seeded database");
