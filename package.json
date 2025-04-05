@@ -12,7 +12,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/utils/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
+    "@faker-js/faker": "^9.6.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
     "@types/node": "^22.14.0",
     "drizzle-kit": "^0.30.6",
