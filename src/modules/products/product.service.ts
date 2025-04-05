@@ -1,25 +1,25 @@
 import { sql } from "drizzle-orm";
 
 import { DB } from "@/db";
-import { customers } from "@/db/schema";
+import { products } from "@/db/schema";
 import { logger } from "@/utils/logger";
 
-import { GetCustomersQueryString } from "./customer.schema";
+import { GetProductsQueryString } from "./product.schema";
 
-export async function getCustomers(
-  { page, limit }: GetCustomersQueryString,
+export async function getProducts(
+  { page, limit }: GetProductsQueryString,
   db: DB,
 ) {
   try {
     const transaction = await db.transaction(async (tx) => {
-      const items = await tx.query.customers.findMany({
+      const items = await tx.query.products.findMany({
         offset: (page - 1) * limit,
         limit,
       });
 
       const count = await tx
-        .select({ count: sql<number>`count(${customers.id})` })
-        .from(customers)
+        .select({ count: sql<number>`count(${products.id})` })
+        .from(products)
         .then((res) => Number(res[0]?.count ?? 0));
 
       return {
@@ -33,7 +33,7 @@ export async function getCustomers(
     return transaction;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    logger.error({ message }, "getCustomers: failed to get customers");
+    logger.error({ message }, "getProducts: failed to get Products");
     throw error;
   }
 }

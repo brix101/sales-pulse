@@ -2,19 +2,19 @@ import { type FastifyReply, type FastifyRequest } from "fastify";
 
 import { logger } from "@/utils/logger";
 
-import { GetCustomersQueryString, queryStringSchema } from "./customer.schema";
-import { getCustomers } from "./customer.service";
+import { GetProductsQueryString, queryStringSchema } from "./product.schema";
+import { getProducts } from "./product.service";
 
-export async function getCustomersHandler(
+export async function getProductsHandler(
   request: FastifyRequest<{
-    Querystring: GetCustomersQueryString;
+    Querystring: GetProductsQueryString;
   }>,
   reply: FastifyReply,
 ) {
   try {
     const query = queryStringSchema.parse(request.query);
 
-    const result = await getCustomers(query, request.db);
+    const result = await getProducts(query, request.db);
 
     return reply.status(200).send({
       ...result,
@@ -22,6 +22,6 @@ export async function getCustomersHandler(
     });
   } catch (error) {
     logger.error(error);
-    return reply.status(500).send({ message: "Failed to get customers" });
+    return reply.status(500).send({ message: "Failed to get Products" });
   }
 }

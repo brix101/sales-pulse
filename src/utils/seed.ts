@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { initDB } from "@/db";
 import { customers, products, sales, salesProducts } from "@/db/schema";
 import env from "@/env";
+
 import { logger } from "./logger";
 
 const CUSTOMERS_COUNT = 500;
