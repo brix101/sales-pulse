@@ -1,8 +1,8 @@
-import type {FastifyReply, FastifyRequest} from "fastify";
+import type { FastifyReply, FastifyRequest } from "fastify";
 
+import type { GetCustomersQueryString } from "./customer.schema";
 import { logger } from "@/utils/logger";
 
-import type { GetCustomersQueryString} from "./customer.schema";
 import { queryStringSchema } from "./customer.schema";
 import { getCustomers } from "./customer.service";
 

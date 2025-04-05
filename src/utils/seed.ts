@@ -11,7 +11,7 @@ const PRODUCTS_COUNT = 5000;
 const SALES_MAX_PRODUCTS = 100;
 
 export async function seed() {
-  const db = await initDB(env.DATABASE_URL);
+  const db = initDB(env.DATABASE_URL);
 
   logger.info("🌱🌱🌱   Seeding database");
 

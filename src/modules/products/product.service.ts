@@ -1,10 +1,10 @@
-import type { DB } from "@/db";
-import type { Product} from "@/db/schema";
-import { products } from "@/db/schema";
-import { logger } from "@/utils/logger";
 import { sql } from "drizzle-orm";
 
 import type { GetProductsQueryString } from "./product.schema";
+import type { DB } from "@/db";
+import type { Product } from "@/db/schema";
+import { products } from "@/db/schema";
+import { logger } from "@/utils/logger";
 
 /**
  * Get products

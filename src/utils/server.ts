@@ -35,12 +35,12 @@ export async function createServer({
     logger: loggerOptions,
   });
 
-  fastify.addHook("onRequest", async (req) => {
+  fastify.addHook("onRequest", (req) => {
     req.db = db;
   });
 
   fastify.after(() => {
-    fastify.get("/healthcheck", async () => {
+    fastify.get("/healthcheck", () => {
       return { status: "ok" };
     });
   });

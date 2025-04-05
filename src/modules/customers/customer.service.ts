@@ -1,10 +1,10 @@
-import type { DB } from "@/db";
-import type { Customer} from "@/db/schema";
-import { customers } from "@/db/schema";
-import { logger } from "@/utils/logger";
 import { sql } from "drizzle-orm";
 
 import type { GetCustomersQueryString } from "./customer.schema";
+import type { DB } from "@/db";
+import type { Customer } from "@/db/schema";
+import { customers } from "@/db/schema";
+import { logger } from "@/utils/logger";
 
 /**
  * Get customers

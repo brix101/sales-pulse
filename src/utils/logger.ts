@@ -3,7 +3,7 @@ import pino from "pino";
 import env from "@/env";
 
 export const loggerOptions: pino.LoggerOptions = {
-  level: env.LOG_LEVEL ?? "info",
+  level: env.LOG_LEVEL,
   transport: {
     target: "pino-pretty",
     options: {
