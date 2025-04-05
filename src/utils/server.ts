@@ -3,6 +3,7 @@ import fastify, { FastifyInstance } from "fastify";
 import { DB } from "@/db";
 import { customerRouter } from "@/modules/customers/customer.router";
 import { productRouter } from "@/modules/products/product.router";
+import { saleRouter } from "@/modules/sales/sale.router";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -41,5 +42,7 @@ export async function createServer({
 
   server.register(customerRouter, { prefix: "api/v1/customers" });
   server.register(productRouter, { prefix: "api/v1/products" });
+  server.register(saleRouter, { prefix: "api/v1/sales" });
+
   return server;
 }

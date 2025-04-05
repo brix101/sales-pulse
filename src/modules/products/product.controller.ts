@@ -22,6 +22,6 @@ export async function getProductsHandler(
     });
   } catch (error) {
     logger.error(error);
-    return reply.status(500).send({ message: "Failed to get Products" });
+    return reply.status(500).send({ message: "Something went wrong" });
   }
 }

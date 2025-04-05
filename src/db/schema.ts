@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp } from "drizzle-orm/pg-core";
 
 const timestamps = {
@@ -40,6 +41,14 @@ export const sales = pgTable("sales", (t) => ({
 export type Sale = typeof sales.$inferSelect;
 export type NewSale = typeof sales.$inferInsert;
 
+export const salesRelations = relations(sales, ({ many, one }) => ({
+  customer: one(customers, {
+    fields: [sales.customerId],
+    references: [customers.id],
+  }),
+  products: many(salesProducts),
+}));
+
 export const salesProducts = pgTable(
   "sales_products",
   (t) => ({
@@ -50,3 +59,14 @@ export const salesProducts = pgTable(
   }),
   (t) => [index("sales_products_pk").on(t.saleId, t.productId)],
 );
+
+export const salesProductsRelations = relations(salesProducts, ({ one }) => ({
+  sale: one(sales, {
+    fields: [salesProducts.saleId],
+    references: [sales.id],
+  }),
+  product: one(products, {
+    fields: [salesProducts.productId],
+    references: [products.id],
+  }),
+}));
