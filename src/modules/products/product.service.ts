@@ -1,15 +1,25 @@
-import { sql } from "drizzle-orm";
-
 import { DB } from "@/db";
-import { products } from "@/db/schema";
+import { Product, products } from "@/db/schema";
 import { logger } from "@/utils/logger";
+import { sql } from "drizzle-orm";
 
 import { GetProductsQueryString } from "./product.schema";
 
+/**
+ * Get products
+ * @param {GetProductsQueryString} query - The query string.
+ * @param {DB} db - The database instance.
+ * @returns {Promise<{ items: Product[], total: number, totalItems: number, totalPage: number }>} The products.
+ */
 export async function getProducts(
   { page, limit }: GetProductsQueryString,
   db: DB,
-) {
+): Promise<{
+  items: Product[];
+  total: number;
+  totalItems: number;
+  totalPage: number;
+}> {
   try {
     const transaction = await db.transaction(async (tx) => {
       const items = await tx.query.products.findMany({

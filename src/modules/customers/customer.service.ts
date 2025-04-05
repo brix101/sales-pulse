@@ -1,15 +1,25 @@
-import { sql } from "drizzle-orm";
-
 import { DB } from "@/db";
-import { customers } from "@/db/schema";
+import { Customer, customers } from "@/db/schema";
 import { logger } from "@/utils/logger";
+import { sql } from "drizzle-orm";
 
 import { GetCustomersQueryString } from "./customer.schema";
 
+/**
+ * Get customers
+ * @param {GetCustomersQueryString} query - The query string.
+ * @param {DB} db - The database instance.
+ * @returns {Promise<{ items: Customer[], total: number, totalItems: number, totalPage: number }>} The customers.
+ */
 export async function getCustomers(
   { page, limit }: GetCustomersQueryString,
   db: DB,
-) {
+): Promise<{
+  items: Customer[];
+  total: number;
+  totalItems: number;
+  totalPage: number;
+}> {
   try {
     const transaction = await db.transaction(async (tx) => {
       const items = await tx.query.customers.findMany({
