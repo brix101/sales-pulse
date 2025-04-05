@@ -9,7 +9,7 @@ import { logger } from "./logger";
 const CUSTOMERS_COUNT = 500;
 const PRODUCTS_COUNT = 5000;
 const SALES_COUNT = 500;
-const SALES_MAX_PRODUCTS = 100;
+const SALES_MAX_PRODUCTS = 10;
 
 export async function seed() {
   const db = await initDB(env.DATABASE_URL);
@@ -33,7 +33,7 @@ export async function seed() {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         image: faker.image.url(),
-        price: faker.commerce.price(),
+        price: Number(faker.commerce.price()),
       })),
     )
     .returning();

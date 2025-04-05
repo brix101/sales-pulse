@@ -24,7 +24,10 @@ export const products = pgTable("products", (t) => ({
   name: t.varchar({ length: 255 }).notNull(),
   description: t.text().notNull(),
   image: t.text().notNull(),
-  price: t.numeric({ precision: 10, scale: 2 }).notNull(),
+  price: t
+    .numeric({ mode: "number", precision: 10, scale: 2 })
+    .$type<number>()
+    .notNull(),
   ...timestamps,
 }));
 
