@@ -1,10 +1,10 @@
 {
   "name": "sales-pulse",
-  "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "tsx --watch src/index.ts",
-    "build": "tsc",
-    "start": "node build/src/index.js",
+    "build": "tsc && tsc-alias",
+    "start": "node ./dist/src/index.js",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },
@@ -12,9 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "fastify": "^5.2.2",
     "pino": "^9.6.0",
-    "pino-pretty": "^13.0.0"
+    "pino-pretty": "^13.0.0",
+    "tsc-alias": "^1.8.13",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",

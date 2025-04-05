@@ -1,12 +1,14 @@
-import pino from "pino";
+import env from '@/env';
+import pino from 'pino';
 
 export const logger = pino({
-  level: "info", // TODO: make this configurable
+  level: env.LOG_LEVEL ?? 'info',
   transport: {
-    target: "pino-pretty",
+    target: 'pino-pretty',
     options: {
       colorize: true,
     },
   },
-  redact: ["DATABASE_URL"], // TODO: make this configurable
+  // ? Redact/hide sensitive information
+  redact: ['DATABASE_URL'],
 });
