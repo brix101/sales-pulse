@@ -1,9 +1,9 @@
-import env from './env';
-import { logger } from './utils/logger';
-import { createServer } from './utils/server';
+import env from "./env";
+import { logger } from "./utils/logger";
+import { createServer } from "./utils/server";
 
 async function main() {
-  logger.info('Starting server...');
+  logger.info("Starting server...");
 
   const server = await createServer();
 
