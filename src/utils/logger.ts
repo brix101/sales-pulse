@@ -2,7 +2,7 @@ import pino from "pino";
 
 import env from "@/env";
 
-export const logger = pino({
+export const loggerOptions: pino.LoggerOptions = {
   level: env.LOG_LEVEL ?? "info",
   transport: {
     target: "pino-pretty",
@@ -10,6 +10,7 @@ export const logger = pino({
       colorize: true,
     },
   },
-  // ? Redact/hide sensitive information
   redact: ["DATABASE_URL"],
-});
+};
+
+export const logger = pino(loggerOptions);

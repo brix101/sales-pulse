@@ -8,7 +8,7 @@ async function main() {
 
   try {
     await ping(db);
-    logger.info("database connected");
+    logger.info("🔌💾✅ Database connected");
   } catch (e) {
     logger.error(e, "ping failed");
     process.exit(1);

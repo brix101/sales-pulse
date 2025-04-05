@@ -8,7 +8,7 @@ import * as schema from "./schema";
 
 class MyLogWriter implements LogWriter {
   write(message: string) {
-    logger.info(message);
+    logger.info(`💾🔍⏳ ${message}`);
   }
 }
 
@@ -22,6 +22,8 @@ export async function initDB(url: Env["DATABASE_URL"]): Promise<
     $client: string;
   }
 > {
+  logger.info("🔌💾⏳ Initializing database");
+
   return drizzle(url, {
     schema,
     logger: new DefaultLogger({

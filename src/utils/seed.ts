@@ -8,13 +8,12 @@ import { logger } from "./logger";
 
 const CUSTOMERS_COUNT = 500;
 const PRODUCTS_COUNT = 5000;
-const SALES_COUNT = 500;
-const SALES_MAX_PRODUCTS = 10;
+const SALES_MAX_PRODUCTS = 100;
 
 export async function seed() {
   const db = await initDB(env.DATABASE_URL);
 
-  logger.info("Seeding database");
+  logger.info("🌱🌱🌱   Seeding database");
 
   const newCustomers = await db
     .insert(customers)
@@ -38,39 +37,42 @@ export async function seed() {
     )
     .returning();
 
-  const newSales = await db
-    .insert(sales)
-    .values(
-      Array.from({ length: SALES_COUNT }, () => ({
-        customerId: faker.helpers.arrayElement(newCustomers).id,
-        // orderDate: faker.date.recent(),
+  const customerSales = newCustomers
+    .map((customer) =>
+      Array.from({ length: faker.number.int({ min: 1, max: 100 }) }, () => ({
+        customerId: customer.id,
         orderDate: faker.date.between({
           from: new Date(new Date().getFullYear(), 0, 1),
           to: new Date(), // Today
         }),
       })),
     )
-    .returning();
+    .flat();
 
-  await db.insert(salesProducts).values(
-    Array.from(
-      {
-        length: faker.number.int({
-          min: 100,
-          max: SALES_MAX_PRODUCTS * SALES_COUNT,
-        }),
-      },
-      () => ({
-        saleId: faker.helpers.arrayElement(newSales).id,
-        productId: faker.helpers.arrayElement(newProducts).id,
-        quantity: faker.number.int({ min: 1, max: 100 }),
-      }),
-    ),
-  );
+  const newSales = await db.insert(sales).values(customerSales).returning();
 
-  logger.info("Seeded database");
+  const salesProductsData = newSales.flatMap((sale) => {
+    const productCount = faker.number.int({
+      min: 1,
+      max: SALES_MAX_PRODUCTS,
+    });
 
-  process.exit(0);
+    return Array.from({ length: productCount }, () => ({
+      saleId: sale.id,
+      productId: faker.helpers.arrayElement(newProducts).id,
+      quantity: faker.number.int({ min: 1, max: 100 }),
+    }));
+  });
+
+  await db.insert(salesProducts).values(salesProductsData);
+
+  logger.info("✅✅✅   Seeded database");
 }
 
-void seed();
+void seed()
+  .catch((err) => {
+    logger.error("❌❌❌   Error seeding database", err);
+  })
+  .finally(() => {
+    process.exit(0);
+  });

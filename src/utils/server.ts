@@ -5,6 +5,8 @@ import { customerRouter } from "@/modules/customers/customer.router";
 import { productRouter } from "@/modules/products/product.router";
 import { saleRouter } from "@/modules/sales/sale.router";
 
+import { logger, loggerOptions } from "./logger";
+
 declare module "fastify" {
   interface FastifyRequest {
     // user: Awaited<ReturnType<typeof getUserById>> | null;
@@ -26,8 +28,10 @@ export async function createServer({
 }: {
   db: DB;
 }): Promise<FastifyInstance> {
+  logger.info("🚀🚀🚀 Launching server");
+
   const server = fastify({
-    logger: true,
+    logger: loggerOptions,
   });
 
   server.addHook("onRequest", async (req) => {
