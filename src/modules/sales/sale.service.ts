@@ -1,10 +1,10 @@
 import { sql } from "drizzle-orm";
 
-import { DB } from "@/db";
+import type { DB } from "@/db";
 import { sales } from "@/db/schema";
 import { logger } from "@/utils/logger";
 
-import { GetSalesQueryString } from "./sale.schema";
+import type { GetSalesQueryString } from "./sale.schema";
 
 export async function getSales({ page, limit }: GetSalesQueryString, db: DB) {
   try {

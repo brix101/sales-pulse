@@ -1,5 +1,5 @@
-import { FastifyReply } from "fastify";
-import { StatusCodes } from "http-status-codes";
+import type { FastifyReply } from "fastify";
+import type { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 
 export function httpError({

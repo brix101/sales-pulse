@@ -4,7 +4,7 @@ import { logger } from "./utils/logger";
 import { createServer } from "./utils/server";
 
 async function main() {
-  const db = await initDB(env.DATABASE_URL);
+  const db = initDB(env.DATABASE_URL);
 
   try {
     await ping(db);

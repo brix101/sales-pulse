@@ -1,6 +1,7 @@
-import fastify, { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
+import Fastify from "fastify";
 
-import { DB } from "@/db";
+import type { DB } from "@/db";
 import { customerRouter } from "@/modules/customers/customer.router";
 import { productRouter } from "@/modules/products/product.router";
 import { saleRouter } from "@/modules/sales/sale.router";
@@ -30,23 +31,23 @@ export async function createServer({
 }): Promise<FastifyInstance> {
   logger.info("🚀🚀🚀 Launching server");
 
-  const server = fastify({
+  const fastify = Fastify({
     logger: loggerOptions,
   });
 
-  server.addHook("onRequest", async (req) => {
+  fastify.addHook("onRequest", async (req) => {
     req.db = db;
   });
 
-  server.after(() => {
-    server.get("/healthcheck", async () => {
+  fastify.after(() => {
+    fastify.get("/healthcheck", async () => {
       return { status: "ok" };
     });
   });
 
-  server.register(customerRouter, { prefix: "api/v1/customers" });
-  server.register(productRouter, { prefix: "api/v1/products" });
-  server.register(saleRouter, { prefix: "api/v1/sales" });
+  fastify.register(customerRouter, { prefix: "api/v1/customers" });
+  fastify.register(productRouter, { prefix: "api/v1/products" });
+  fastify.register(saleRouter, { prefix: "api/v1/sales" });
 
-  return server;
+  return fastify;
 }

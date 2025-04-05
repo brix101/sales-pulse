@@ -1,8 +1,9 @@
-import { type FastifyReply, type FastifyRequest } from "fastify";
+import type {FastifyReply, FastifyRequest} from "fastify";
 
 import { logger } from "@/utils/logger";
 
-import { GetCustomersQueryString, queryStringSchema } from "./customer.schema";
+import type { GetCustomersQueryString} from "./customer.schema";
+import { queryStringSchema } from "./customer.schema";
 import { getCustomers } from "./customer.service";
 
 export async function getCustomersHandler(

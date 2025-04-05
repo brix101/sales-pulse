@@ -1,7 +1,9 @@
-import { DefaultLogger, LogWriter, sql } from "drizzle-orm";
-import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
+import type { LogWriter } from "drizzle-orm";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { DefaultLogger, sql } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/node-postgres";
 
-import { Env } from "@/env";
+import type { Env } from "@/env";
 
 import { logger } from "../utils/logger";
 import * as schema from "./schema";
@@ -15,13 +17,13 @@ class MyLogWriter implements LogWriter {
 /**
  * Initializes the database.
  * @param {Env["DATABASE_URL"]} url - The database URL.
- * @returns {Promise<NodePgDatabase<typeof schema> & { $client: string }>} A promise that resolves to the database instance.
+ * @returns {NodePgDatabase<typeof schema> & { $client: string }} The database instance.
  */
-export async function initDB(url: Env["DATABASE_URL"]): Promise<
-  NodePgDatabase<typeof schema> & {
-    $client: string;
-  }
-> {
+export function initDB(url: Env["DATABASE_URL"]): NodePgDatabase<
+  typeof schema
+> & {
+  $client: string;
+} {
   logger.info("🔌💾⏳ Initializing database");
 
   return drizzle(url, {
