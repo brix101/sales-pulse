@@ -1,11 +1,21 @@
 import { RequestContext } from "@mikro-orm/core";
 import Fastify from "fastify";
 
+import type { Services } from "./db.js";
+
+import { customerRouter } from "../modules/customers/customer.route.js";
 import { initDB } from "./db.js";
 import { loggerOptions } from "./logger.js";
 
+declare module "fastify" {
+  interface FastifyRequest {
+    db: Services;
+  }
+}
+
 export async function bootstrap(port = 3000, migrate = true) {
   const db = await initDB();
+
   if (migrate) {
     await db.orm.migrator.up();
   }
@@ -31,6 +41,8 @@ export async function bootstrap(port = 3000, migrate = true) {
   });
 
   // register routes
+
+  app.register(customerRouter, { prefix: "/api/v1/customers" });
 
   const url = await app.listen({ port });
 
