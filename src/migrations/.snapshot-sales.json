@@ -212,24 +212,6 @@
           "length": 6,
           "mappedType": "datetime"
         },
-        "quantity": {
-          "name": "quantity",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "total_price": {
-          "name": "total_price",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
         "order_date": {
           "name": "order_date",
           "type": "timestamptz",
@@ -242,15 +224,6 @@
         },
         "customer_id": {
           "name": "customer_id",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        },
-        "product_id": {
-          "name": "product_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -287,13 +260,105 @@
           "referencedTableName": "public.customer",
           "deleteRule": "cascade",
           "updateRule": "cascade"
+        }
+      },
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": false,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
         },
-        "sale_product_id_foreign": {
-          "constraintName": "sale_product_id_foreign",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "sale_id": {
+          "name": "sale_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "1",
+          "mappedType": "integer"
+        }
+      },
+      "name": "sales_item",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "sales_item_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "sales_item_sale_id_foreign": {
+          "constraintName": "sales_item_sale_id_foreign",
+          "columnNames": [
+            "sale_id"
+          ],
+          "localTableName": "public.sales_item",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.sale",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "sales_item_product_id_foreign": {
+          "constraintName": "sales_item_product_id_foreign",
           "columnNames": [
             "product_id"
           ],
-          "localTableName": "public.sale",
+          "localTableName": "public.sales_item",
           "referencedColumnNames": [
             "id"
           ],

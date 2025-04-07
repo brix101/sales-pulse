@@ -6,6 +6,7 @@ import type { EntityManager } from "@mikro-orm/core";
 import { Customer } from "../modules/customers/customer.entity.js";
 import { Product } from "../modules/products/product.entity.js";
 import { Sale } from "../modules/sales/sale.entity.js";
+import { SalesItem } from "../modules/sales/sales-item.entity.js";
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
@@ -36,35 +37,40 @@ export class DatabaseSeeder extends Seeder {
     }
 
     const saleEntities = [];
+    const salesItemsEntities = [];
 
     for (const customer of customerEntities) {
       const numberOfSales = faker.number.int({ min: 1, max: 100 });
+
       for (let i = 0; i < numberOfSales; i++) {
-        const product =
-          productEntities[
-            faker.number.int({ min: 0, max: numberOfProducts - 1 })
-          ];
-
-        const quantity = faker.number.int({ min: 1, max: 10 });
-        const totalPrice = product.price * quantity;
-
         const sale = em.create(Sale, {
           customer,
-          product,
-          quantity,
-          totalPrice,
+          items: [],
           orderDate: faker.date.between({
             from: new Date(new Date().getFullYear(), 0, 1),
             to: new Date(),
           }),
         });
-
         saleEntities.push(sale);
+
+        const numberOfItems = faker.number.int({ min: 1, max: 10 });
+
+        for (let j = 0; j < numberOfItems; j++) {
+          const product =
+            productEntities[
+              faker.number.int({ min: 0, max: numberOfProducts - 1 })
+            ];
+
+          const quantity = faker.number.int({ min: 1, max: 10 });
+          const salesItem = em.create(SalesItem, { product, quantity, sale });
+          salesItemsEntities.push(salesItem);
+        }
       }
     }
 
     await em.persistAndFlush(customerEntities);
     await em.persistAndFlush(productEntities);
     await em.persistAndFlush(saleEntities);
+    await em.persistAndFlush(salesItemsEntities);
   }
 }
