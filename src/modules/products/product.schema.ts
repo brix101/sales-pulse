@@ -1,11 +1,7 @@
 import { z } from "zod";
 
-import { errorResponses } from "@/utils/http";
-
-export const queryStringSchema = z.object({
-  limit: z.coerce.number().optional().default(10),
-  page: z.coerce.number().optional().default(1),
-});
+import { queryStringSchema } from "../../common/schema.js";
+import { errorResponses } from "../../utils/http.js";
 
 export const getProductsSchema = {
   tags: ["Products"],

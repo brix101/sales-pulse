@@ -1,15 +1,16 @@
 import { z } from "zod";
 
-import { errorResponses } from "@/utils/http";
+import { queryStringSchema } from "../../common/schema.js";
+import { errorResponses } from "../../utils/http.js";
 
-export const queryStringSchema = z.object({
-  limit: z.coerce.number().optional().default(10),
-  page: z.coerce.number().optional().default(1),
+export const saleQueryStringSchema = queryStringSchema.extend({
+  customerId: z.coerce.number().optional(),
+  month: z.string().optional(),
 });
 
 export const getSalesSchema = {
   tags: ["Sales"],
-  queryString: queryStringSchema,
+  queryString: saleQueryStringSchema,
   response: {
     200: z.object({
       total: z.number(),
@@ -20,4 +21,4 @@ export const getSalesSchema = {
   },
 };
 
-export type GetSalesQueryString = z.infer<typeof queryStringSchema>;
+export type GetSalesQueryString = z.infer<typeof saleQueryStringSchema>;

@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import type { GetSalesQueryString } from "./sale.schema";
-import { logger } from "@/utils/logger";
+import type { GetSalesQueryString } from "./sale.schema.js";
 
-import { queryStringSchema } from "./sale.schema";
-import { getSales } from "./sale.service";
+import { logger } from "../../utils/logger.js";
+import { saleQueryStringSchema } from "./sale.schema.js";
+import { getSales } from "./sale.service.js";
 
 export async function getSalesHandler(
   request: FastifyRequest<{
@@ -13,13 +13,13 @@ export async function getSalesHandler(
   reply: FastifyReply,
 ) {
   try {
-    const query = queryStringSchema.parse(request.query);
+    const query = saleQueryStringSchema.parse(request.query);
 
-    const result = await getSales(query, request.db);
+    const result = await getSales(request.db, query);
 
     return reply.status(200).send({
-      ...result,
       ...query,
+      ...result,
     });
   } catch (error) {
     logger.error(error);

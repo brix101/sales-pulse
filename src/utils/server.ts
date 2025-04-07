@@ -1,53 +1,58 @@
-import type { FastifyInstance } from "fastify";
+import { RequestContext } from "@mikro-orm/core";
 import Fastify from "fastify";
 
-import type { DB } from "@/db";
-import { customerRouter } from "@/modules/customers/customer.router";
-import { productRouter } from "@/modules/products/product.router";
-import { saleRouter } from "@/modules/sales/sale.router";
+import type { Services } from "./db.js";
 
-import { logger, loggerOptions } from "./logger";
+import { customerRouter } from "../modules/customers/customer.route.js";
+import { productRouter } from "../modules/products/product.route.js";
+import { saleRouter } from "../modules/sales/sale.route.js";
+import { initDB } from "./db.js";
+import { loggerOptions } from "./logger.js";
 
 declare module "fastify" {
   interface FastifyRequest {
-    // user: Awaited<ReturnType<typeof getUserById>> | null;
-    db: DB;
+    db: Services;
   }
-
-  // interface FastifyInstance {
-  //   // authenticate: typeof authenticate;
-  // }
 }
 
-/**
- * Creates a new Fastify server instance.
- * @param {DB} options.db - The database instance.
- * @returns {Promise<FastifyInstance>} A new Fastify server instance.
- */
-export async function createServer({
-  db,
-}: {
-  db: DB;
-}): Promise<FastifyInstance> {
-  logger.info("🚀🚀🚀 Launching server");
+export async function bootstrap(port = 3000, migrate = true) {
+  const db = await initDB();
 
-  const fastify = Fastify({
+  if (migrate) {
+    await db.orm.migrator.up();
+  }
+
+  const app = Fastify({
     logger: loggerOptions,
   });
 
-  fastify.addHook("onRequest", (req) => {
-    req.db = db;
+  // register request context hook
+  app.addHook("onRequest", (_request, _reply, done) => {
+    RequestContext.create(db.em, done);
   });
 
-  fastify.after(() => {
-    fastify.get("/healthcheck", () => {
+  app.addHook("preHandler", (request, _reply, done) => {
+    request.db = db;
+    done();
+  });
+
+  app.after(() => {
+    app.get("/healthcheck", () => {
       return { status: "ok" };
     });
   });
 
-  fastify.register(customerRouter, { prefix: "api/v1/customers" });
-  fastify.register(productRouter, { prefix: "api/v1/products" });
-  fastify.register(saleRouter, { prefix: "api/v1/sales" });
+  // shut down the connection when closing the app
+  app.addHook("onClose", async () => {
+    await db.orm.close();
+  });
 
-  return fastify;
+  // register routes
+  app.register(customerRouter, { prefix: "/api/v1/customers" });
+  app.register(productRouter, { prefix: "/api/v1/products" });
+  app.register(saleRouter, { prefix: "/api/v1/sales" });
+
+  const url = await app.listen({ port });
+
+  return { app, url };
 }
