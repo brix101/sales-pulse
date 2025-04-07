@@ -29,6 +29,11 @@ export async function bootstrap(port = 3000, migrate = true) {
     RequestContext.create(db.em, done);
   });
 
+  app.addHook("preHandler", (request, _reply, done) => {
+    request.db = db;
+    done();
+  });
+
   app.after(() => {
     app.get("/healthcheck", () => {
       return { status: "ok" };
@@ -41,7 +46,6 @@ export async function bootstrap(port = 3000, migrate = true) {
   });
 
   // register routes
-
   app.register(customerRouter, { prefix: "/api/v1/customers" });
 
   const url = await app.listen({ port });
