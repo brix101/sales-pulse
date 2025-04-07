@@ -24,7 +24,4 @@ export default defineConfig({
   // for highlighting the SQL queries
   highlighter: new SqlHighlighter(),
   metadataProvider: TsMorphMetadataProvider,
-  migrations: {
-    path: "./migrations",
-  },
 });

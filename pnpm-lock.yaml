@@ -17,9 +17,6 @@ importers:
       '@mikro-orm/postgresql':
         specifier: ^6.4.12
         version: 6.4.12(@mikro-orm/core@6.4.12)
-      '@mikro-orm/reflection':
-        specifier: ^6.4.12
-        version: 6.4.12(@mikro-orm/core@6.4.12)
       '@mikro-orm/sql-highlighter':
         specifier: ^1.0.1
         version: 1.0.1
@@ -60,6 +57,12 @@ importers:
       '@mikro-orm/cli':
         specifier: ^6.4.12
         version: 6.4.12(pg@8.14.1)
+      '@mikro-orm/reflection':
+        specifier: ^6.4.12
+        version: 6.4.12(@mikro-orm/core@6.4.12)
+      '@mikro-orm/seeder':
+        specifier: ^6.4.12
+        version: 6.4.12(@mikro-orm/core@6.4.12)
       '@types/node':
         specifier: ^22.14.0
         version: 22.14.0
@@ -433,6 +436,12 @@ packages:
 
   '@mikro-orm/reflection@6.4.12':
     resolution: {integrity: sha512-RZAMFAwe+yBylbiaHTyBDXDZWkqcLVv6IxRAc/YGBhD+Z1NjZbrFRrNg7OQryEW13OUIuIrXTCgKb9C0Mem0cQ==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^6.0.0
+
+  '@mikro-orm/seeder@6.4.12':
+    resolution: {integrity: sha512-3LpEbhy6A0ytI2rav/QWfnQOdRjQ6B02UsqW1w6ExLAKm4RMuMY+YhBbl79Wh3QW19mM+SNVxtmef9ERIEEEdA==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
@@ -2360,6 +2369,12 @@ snapshots:
       '@mikro-orm/core': 6.4.12
       globby: 11.1.0
       ts-morph: 25.0.1
+
+  '@mikro-orm/seeder@6.4.12(@mikro-orm/core@6.4.12)':
+    dependencies:
+      '@mikro-orm/core': 6.4.12
+      fs-extra: 11.3.0
+      globby: 11.1.0
 
   '@mikro-orm/sql-highlighter@1.0.1':
     dependencies:
