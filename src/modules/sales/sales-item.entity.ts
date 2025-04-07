@@ -1,11 +1,20 @@
-import { Cascade, Entity, ManyToOne, Property } from "@mikro-orm/postgresql";
+import {
+  Cascade,
+  Entity,
+  EntityRepositoryType,
+  ManyToOne,
+  Property,
+} from "@mikro-orm/postgresql";
 
 import { BaseEntity } from "../../common/base.entity.js";
 import { Product } from "../products/product.entity.js";
 import { Sale } from "./sale.entity.js";
+import { SalesItemRepository } from "./sales-item.repository.js";
 
-@Entity()
+@Entity({ repository: () => SalesItemRepository })
 export class SalesItem extends BaseEntity {
+  [EntityRepositoryType]?: SalesItemRepository;
+
   @ManyToOne(() => Sale, { cascade: [Cascade.ALL] })
   sale!: Sale;
 
