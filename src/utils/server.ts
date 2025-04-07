@@ -1,53 +1,22 @@
-import type { FastifyInstance } from "fastify";
 import Fastify from "fastify";
 
-import type { DB } from "@/db";
-import { customerRouter } from "@/modules/customers/customer.router";
-import { productRouter } from "@/modules/products/product.router";
-import { saleRouter } from "@/modules/sales/sale.router";
+import { logger } from "./logger.js";
 
-import { logger, loggerOptions } from "./logger";
-
-declare module "fastify" {
-  interface FastifyRequest {
-    // user: Awaited<ReturnType<typeof getUserById>> | null;
-    db: DB;
-  }
-
-  // interface FastifyInstance {
-  //   // authenticate: typeof authenticate;
-  // }
-}
-
-/**
- * Creates a new Fastify server instance.
- * @param {DB} options.db - The database instance.
- * @returns {Promise<FastifyInstance>} A new Fastify server instance.
- */
-export async function createServer({
-  db,
-}: {
-  db: DB;
-}): Promise<FastifyInstance> {
+export async function bootstrap(port = 3000, migrate = true) {
   logger.info("🚀🚀🚀 Launching server");
+  logger.info({ migrate });
 
-  const fastify = Fastify({
-    logger: loggerOptions,
+  const app = Fastify({
+    // logger: loggerOptions,
   });
 
-  fastify.addHook("onRequest", async (req) => {
-    req.db = db;
-  });
-
-  fastify.after(() => {
-    fastify.get("/healthcheck", async () => {
+  app.after(() => {
+    app.get("/healthcheck", () => {
       return { status: "ok" };
     });
   });
 
-  fastify.register(customerRouter, { prefix: "api/v1/customers" });
-  fastify.register(productRouter, { prefix: "api/v1/products" });
-  fastify.register(saleRouter, { prefix: "api/v1/sales" });
+  const url = await app.listen({ port });
 
-  return fastify;
+  return { app, url };
 }

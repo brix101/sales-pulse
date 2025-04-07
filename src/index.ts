@@ -1,25 +1,13 @@
-import { initDB, ping } from "./db";
-import env from "./env";
-import { logger } from "./utils/logger";
-import { createServer } from "./utils/server";
+import env from "./env.js";
+import { logger } from "./utils/logger.js";
+import { bootstrap } from "./utils/server.js";
 
 async function main() {
-  const db = initDB(env.DATABASE_URL);
-
   try {
-    await ping(db);
-    logger.info("🔌💾✅ Database connected");
-  } catch (e) {
-    logger.error(e, "ping failed");
-    process.exit(1);
-  }
-
-  const server = await createServer({ db });
-
-  try {
-    await server.listen({ port: env.PORT });
+    const { url } = await bootstrap(env.PORT);
+    logger.info(`Server is running on ${url}`);
   } catch (err) {
-    server.log.error(err);
+    logger.error(err);
     process.exit(1);
   }
 }
