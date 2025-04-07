@@ -4,8 +4,8 @@ import { queryStringSchema } from "../../common/schema.js";
 import { errorResponses } from "../../utils/http.js";
 
 export const saleQueryStringSchema = queryStringSchema.extend({
-  // startDate: z.string().optional(),
-  // endDate: z.string().optional(),
+  customerId: z.coerce.number().optional(),
+  month: z.string().optional(),
 });
 
 export const getSalesSchema = {
