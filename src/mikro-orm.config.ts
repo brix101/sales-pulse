@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { defineConfig } from "@mikro-orm/postgresql";
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
 import { SqlHighlighter } from "@mikro-orm/sql-highlighter";

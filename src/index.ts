@@ -4,8 +4,7 @@ import { bootstrap } from "./utils/server.js";
 
 async function main() {
   try {
-    const { url } = await bootstrap(env.PORT);
-    logger.info(`Server is running on ${url}`);
+    await bootstrap(env.PORT);
   } catch (err) {
     logger.error(err);
     process.exit(1);
