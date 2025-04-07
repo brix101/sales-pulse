@@ -9,7 +9,11 @@ export async function getSales(db: Services, query: GetSalesQueryString) {
 
   const where: FilterQuery<Sale> = {};
 
-  const [sales, total] = await db.sale.findAndCount(where, { limit, offset });
+  const [sales, total] = await db.sale.findAndCount(where, {
+    limit,
+    offset,
+    populate: ["customer", "items", "items.product"],
+  });
 
   return {
     total,

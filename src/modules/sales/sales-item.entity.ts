@@ -15,7 +15,7 @@ import { SalesItemRepository } from "./sales-item.repository.js";
 export class SalesItem extends BaseEntity {
   [EntityRepositoryType]?: SalesItemRepository;
 
-  @ManyToOne(() => Sale, { cascade: [Cascade.ALL] })
+  @ManyToOne()
   sale!: Sale;
 
   @ManyToOne(() => Product, { cascade: [Cascade.ALL] })
