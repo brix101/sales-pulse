@@ -1,5 +1,6 @@
 import {
   BeforeCreate,
+  BeforeUpdate,
   Entity,
   EntityRepositoryType,
   Property,
@@ -25,6 +26,7 @@ export class Customer extends BaseEntity {
   address!: string;
 
   @BeforeCreate()
+  @BeforeUpdate()
   beforeCreate() {
     this.email = this.email.toLowerCase();
   }
