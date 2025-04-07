@@ -30,6 +30,7 @@ Update the following variables in `.env`:
 
 - `DATABASE_URL`: Your PostgreSQL connection string
 - `PORT`: The port number for the API server (default: 3000)
+- `LOG_LEVEL`: Logging level (default: info)
 
 ### 3. Installation
 
@@ -55,10 +56,10 @@ Generate and apply database migrations:
 
 ```bash
 # Apply migrations
-pnpm db:migrate
+pnpm orm migration:up
 
 # Seed the database with sample data
-pnpm db:seed
+pnpm orm seeder:seed
 ```
 
 ### 5. Development
@@ -92,11 +93,13 @@ pnpm start
 - `pnpm lint:fix`: Fix ESLint issues
 - `pnpm format`: Check code formatting
 - `pnpm format:fix`: Fix code formatting
-- `pnpm db:generate`: Generate database migrations
-- `pnpm db:migrate`: Apply database migrations
-- `pnpm db:studio`: Open Drizzle Studio for database management
-- `pnpm db:push`: Push schema changes to database
-- `pnpm db:seed`: Seed the database with sample data
+- `pnpm orm`: Run MikroORM CLI commands
+  - `pnpm orm migration:create`: Create a new migration
+  - `pnpm orm migration:up`: Apply pending migrations
+  - `pnpm orm migration:down`: Revert the last migration
+  - `pnpm orm seeder:seed`: Seed the database
+  - `pnpm orm schema:update`: Update database schema
+  - `pnpm orm schema:fresh`: Drop and recreate database schema
 
 ## Docker Support
 
