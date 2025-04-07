@@ -1,9 +1,17 @@
-import { Entity, Property, t } from "@mikro-orm/postgresql";
+import {
+  Entity,
+  EntityRepositoryType,
+  Property,
+  t,
+} from "@mikro-orm/postgresql";
 
 import { BaseEntity } from "../../common/base.entity.js";
+import { ProductRepository } from "./product.repository.js";
 
-@Entity()
+@Entity({ repository: () => ProductRepository })
 export class Product extends BaseEntity {
+  [EntityRepositoryType]?: ProductRepository;
+
   @Property()
   name!: string;
 
