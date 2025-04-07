@@ -1,22 +1,19 @@
 import type { QueryString } from "../../common/schema.js";
 import type { Services } from "../../utils/db.js";
 
-export async function getCustomers(db: Services, query: QueryString) {
+export async function getProducts(db: Services, query: QueryString) {
   const limit = query.limit || 10;
   const offset = (query.page - 1) * limit;
 
-  const [customers, total] = await db.customer.findAndCount(
+  const [products, total] = await db.product.findAndCount(
     {},
-    {
-      limit,
-      offset,
-    },
+    { limit, offset },
   );
 
   return {
     total,
-    totalItems: customers.length,
+    totalItems: products.length,
     totalPage: Math.ceil(total / query.limit),
-    items: customers,
+    items: products,
   };
 }

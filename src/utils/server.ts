@@ -4,6 +4,8 @@ import Fastify from "fastify";
 import type { Services } from "./db.js";
 
 import { customerRouter } from "../modules/customers/customer.route.js";
+import { productRouter } from "../modules/products/product.route.js";
+import { saleRouter } from "../modules/sales/sale.route.js";
 import { initDB } from "./db.js";
 import { loggerOptions } from "./logger.js";
 
@@ -47,6 +49,8 @@ export async function bootstrap(port = 3000, migrate = true) {
 
   // register routes
   app.register(customerRouter, { prefix: "/api/v1/customers" });
+  app.register(productRouter, { prefix: "/api/v1/products" });
+  app.register(saleRouter, { prefix: "/api/v1/sales" });
 
   const url = await app.listen({ port });
 

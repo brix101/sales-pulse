@@ -4,9 +4,9 @@ import type { QueryString } from "../../common/schema.js";
 
 import { queryStringSchema } from "../../common/schema.js";
 import { logger } from "../../utils/logger.js";
-import { getCustomers } from "./customer.service.js";
+import { getProducts } from "./product.service.js";
 
-export async function getCustomersHandler(
+export async function getProductsHandler(
   request: FastifyRequest<{
     Querystring: QueryString;
   }>,
@@ -15,7 +15,7 @@ export async function getCustomersHandler(
   try {
     const query = queryStringSchema.parse(request.query);
 
-    const result = await getCustomers(request.db, query);
+    const result = await getProducts(request.db, query);
 
     return reply.status(200).send({
       ...query,

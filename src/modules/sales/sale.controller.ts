@@ -1,21 +1,21 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import type { QueryString } from "../../common/schema.js";
+import type { GetSalesQueryString } from "./sale.schema.js";
 
-import { queryStringSchema } from "../../common/schema.js";
 import { logger } from "../../utils/logger.js";
-import { getCustomers } from "./customer.service.js";
+import { saleQueryStringSchema } from "./sale.schema.js";
+import { getSales } from "./sale.service.js";
 
-export async function getCustomersHandler(
+export async function getSalesHandler(
   request: FastifyRequest<{
-    Querystring: QueryString;
+    Querystring: GetSalesQueryString;
   }>,
   reply: FastifyReply,
 ) {
   try {
-    const query = queryStringSchema.parse(request.query);
+    const query = saleQueryStringSchema.parse(request.query);
 
-    const result = await getCustomers(request.db, query);
+    const result = await getSales(request.db, query);
 
     return reply.status(200).send({
       ...query,
