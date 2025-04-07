@@ -35,14 +35,12 @@ export async function initDB(options?: Options) {
 
   const em = orm.em;
 
-  cache = {
+  return (cache = {
     orm,
     em,
     customer: em.getRepository(Customer),
     product: em.getRepository(Product),
     sale: em.getRepository(Sale),
     salesItem: em.getRepository(SalesItem),
-  };
-
-  return cache;
+  });
 }
