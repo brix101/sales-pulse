@@ -1,4 +1,9 @@
-import { Entity, EntityRepositoryType, Property } from "@mikro-orm/postgresql";
+import {
+  BeforeCreate,
+  Entity,
+  EntityRepositoryType,
+  Property,
+} from "@mikro-orm/postgresql";
 
 import { BaseEntity } from "../../common/base.entity.js";
 import { CustomerRepository } from "./customer.repository.js";
@@ -18,4 +23,9 @@ export class Customer extends BaseEntity {
 
   @Property()
   address!: string;
+
+  @BeforeCreate()
+  beforeCreate() {
+    this.email = this.email.toLowerCase();
+  }
 }
