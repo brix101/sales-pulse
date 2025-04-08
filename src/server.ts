@@ -1,13 +1,17 @@
 import { RequestContext } from "@mikro-orm/core";
 import Fastify from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
 
 import type { Services } from "./db.js";
 
-import { customerRouter } from "../modules/customers/customer.route.js";
-import { productRouter } from "../modules/products/product.route.js";
-import { saleRouter } from "../modules/sales/sale.route.js";
 import { initDB } from "./db.js";
-import { loggerOptions } from "./logger.js";
+import { customerRouter } from "./modules/customers/customer.route.js";
+import { productRouter } from "./modules/products/product.route.js";
+import { saleRouter } from "./modules/sales/sale.route.js";
+import { loggerOptions } from "./utils/logger.js";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -25,6 +29,9 @@ export async function bootstrap(port = 3000, migrate = true) {
   const app = Fastify({
     logger: loggerOptions,
   });
+
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
 
   // register request context hook
   app.addHook("onRequest", (_request, _reply, done) => {

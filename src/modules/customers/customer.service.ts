@@ -1,5 +1,5 @@
 import type { QueryString } from "../../common/schema.js";
-import type { Services } from "../../utils/db.js";
+import type { Services } from "../../db.js";
 
 export async function getCustomers(db: Services, query: QueryString) {
   const limit = query.limit || 10;
