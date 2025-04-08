@@ -2,6 +2,7 @@ import {
   BeforeCreate,
   BeforeUpdate,
   Entity,
+  EntityRepositoryType,
   Property,
 } from "@mikro-orm/postgresql";
 import { hash, verify } from "argon2";
@@ -9,11 +10,14 @@ import { hash, verify } from "argon2";
 import type { EventArgs } from "@mikro-orm/postgresql";
 
 import { BaseEntity } from "../../common/base.entity.js";
+import { UserRepository } from "./user.repository.js";
 
-@Entity()
+@Entity({ repository: () => UserRepository })
 export class User extends BaseEntity {
-  @Property()
-  name: string;
+  [EntityRepositoryType]?: UserRepository;
+
+  @Property({ nullable: true })
+  name?: string;
 
   @Property({ unique: true })
   email: string;
@@ -23,7 +27,7 @@ export class User extends BaseEntity {
 
   constructor(user: User) {
     super();
-    this.name = user.name.toLowerCase();
+    this.name = user.name?.toLowerCase();
     this.email = user.email.toLowerCase();
     this.password = user.password;
   }
@@ -32,6 +36,7 @@ export class User extends BaseEntity {
   @BeforeUpdate()
   async hashPassword(args: EventArgs<User>) {
     const password = args.changeSet?.payload.password;
+
     if (password) {
       this.password = await hash(password);
     }
