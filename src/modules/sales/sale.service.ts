@@ -1,4 +1,4 @@
-import type { Services } from "../../utils/db.js";
+import type { Services } from "../../db.js";
 import type { Sale } from "./sale.entity.js";
 import type { GetSalesQueryString } from "./sale.schema.js";
 import type { FilterQuery } from "@mikro-orm/core";

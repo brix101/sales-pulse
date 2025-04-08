@@ -1,6 +1,6 @@
 import env from "./env.js";
+import { bootstrap } from "./server.js";
 import { logger } from "./utils/logger.js";
-import { bootstrap } from "./utils/server.js";
 
 async function main() {
   try {

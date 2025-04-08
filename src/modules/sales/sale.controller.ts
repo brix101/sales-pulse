@@ -2,8 +2,6 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 
 import type { GetSalesQueryString } from "./sale.schema.js";
 
-import { logger } from "../../utils/logger.js";
-import { saleQueryStringSchema } from "./sale.schema.js";
 import { getSales } from "./sale.service.js";
 
 export async function getSalesHandler(
@@ -13,16 +11,14 @@ export async function getSalesHandler(
   reply: FastifyReply,
 ) {
   try {
-    const query = saleQueryStringSchema.parse(request.query);
-
-    const result = await getSales(request.db, query);
+    const result = await getSales(request.db, request.query);
 
     return reply.status(200).send({
-      ...query,
+      ...request.query,
       ...result,
     });
   } catch (error) {
-    logger.error(error);
+    request.log.error(error);
     return reply.status(500).send({ message: "Something went wrong" });
   }
 }

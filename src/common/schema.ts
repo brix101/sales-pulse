@@ -5,4 +5,4 @@ export const queryStringSchema = z.object({
   page: z.coerce.number().optional().default(1),
 });
 
-export type QueryString = z.infer<typeof queryStringSchema>;
+export type QueryStringType = z.infer<typeof queryStringSchema>;
