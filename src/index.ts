@@ -4,7 +4,7 @@ import { logger } from "./utils/logger.js";
 
 async function main() {
   try {
-    await bootstrap(env.PORT);
+    await bootstrap(env);
   } catch (err) {
     logger.error(err);
     process.exit(1);

@@ -6,6 +6,7 @@ import {
 
 import type { LoginRequest, SignupRequest } from "./user.schema.js";
 
+import env from "../../env.js";
 import { getUserById, loginUser, signupUser } from "./user.service.js";
 
 export async function loginUserHandler(
@@ -17,7 +18,7 @@ export async function loginUserHandler(
 
     const token = await reply.jwtSign(
       { id: user.id, email: user.email },
-      { sign: { expiresIn: "15m" } },
+      { sign: { expiresIn: env.JWT_EXPIRATION_TIME } },
     );
 
     return reply.status(200).send({
@@ -63,7 +64,7 @@ export async function signupUserHandler(
     const user = await signupUser(request.db, request.body);
     const token = await reply.jwtSign(
       { id: user.id, email: user.email },
-      { sign: { expiresIn: "15m" } },
+      { sign: { expiresIn: env.JWT_EXPIRATION_TIME } },
     );
 
     return reply.status(201).send({

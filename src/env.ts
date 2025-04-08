@@ -18,6 +18,14 @@ const EnvSchema = z.object({
     "silent",
   ]),
   DATABASE_URL: z.string().url(),
+  DATABASE_MIGRATE: z.boolean().default(false),
+  JWT_PUBLIC_KEY: z
+    .string()
+    .transform((val) => Buffer.from(val, "base64").toString("utf-8")),
+  JWT_PRIVATE_KEY: z
+    .string()
+    .transform((val) => Buffer.from(val, "base64").toString("utf-8")),
+  JWT_EXPIRATION_TIME: z.number().default(3600),
 });
 
 export type Env = z.infer<typeof EnvSchema>;
