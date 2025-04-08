@@ -1,7 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 
-import { loginUserHandler, signupUserHandler } from "./user.controller.js";
+import { verifyJWT } from "../../utils/auth.js";
+import {
+  getMeHandler,
+  loginUserHandler,
+  signupUserHandler,
+} from "./user.controller.js";
 import { loginSchema, signupSchema } from "./user.schema.js";
 
 export function userRoutes(app: FastifyInstance) {
@@ -21,5 +26,13 @@ export function userRoutes(app: FastifyInstance) {
       schema: { body: signupSchema },
     },
     signupUserHandler,
+  );
+
+  app.get(
+    "/me",
+    {
+      onRequest: verifyJWT,
+    },
+    getMeHandler,
   );
 }

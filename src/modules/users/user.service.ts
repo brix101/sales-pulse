@@ -34,3 +34,13 @@ export async function loginUser(db: Services, request: LoginRequest) {
     throw error;
   }
 }
+
+export async function getUserById(db: Services, userId: number) {
+  try {
+    const user = await db.user.findOneOrFail({ id: userId });
+    return user;
+  } catch (error) {
+    logger.error(error);
+    throw error;
+  }
+}

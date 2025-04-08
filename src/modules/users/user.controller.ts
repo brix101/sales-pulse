@@ -6,8 +6,7 @@ import {
 
 import type { LoginRequest, SignupRequest } from "./user.schema.js";
 
-import { logger } from "../../utils/logger.js";
-import { loginUser, signupUser } from "./user.service.js";
+import { getUserById, loginUser, signupUser } from "./user.service.js";
 
 export async function loginUserHandler(
   request: FastifyRequest<{ Body: LoginRequest }>,
@@ -43,7 +42,7 @@ export async function loginUserHandler(
       });
     }
 
-    logger.error(error);
+    request.log.error(error);
     return reply.status(500).send({
       message: "Something went wrong",
       details: {
@@ -86,13 +85,43 @@ export async function signupUserHandler(
       });
     }
 
-    logger.error(error);
+    request.log.error(error);
     return reply.status(500).send({
       message: "Something went wrong",
       details: {
         issues: {
           path: ["email"],
           message: "Failed to signup user",
+        },
+      },
+    });
+  }
+}
+
+export async function getMeHandler(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  try {
+    // Get the user ID from the JWT token
+    const payload = request.user as {
+      id: number;
+    };
+    const userId = payload.id;
+
+    const user = await getUserById(request.db, userId);
+
+    return reply.status(200).send({
+      user,
+    });
+  } catch (error) {
+    request.log.error(error);
+    return reply.status(500).send({
+      message: "Something went wrong",
+      details: {
+        issues: {
+          path: ["user"],
+          message: "Failed to get user information",
         },
       },
     });

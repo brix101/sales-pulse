@@ -22,3 +22,10 @@ export const signupSchema = loginSchema.extend({
 });
 
 export type SignupRequest = z.infer<typeof signupSchema>;
+
+export const meSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+});
+
+export type MeRequest = z.infer<typeof meSchema>;
