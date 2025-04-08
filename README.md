@@ -26,6 +26,22 @@ Copy the example environment file and update the values:
 cp .env.example .env
 ```
 
+#### Generate RSA Keys for JWT
+
+Generate RSA keys for JWT signing:
+
+```bash
+# Generate private key
+openssl genpkey -algorithm RSA -out jwt-private.pem -pkeyopt rsa_keygen_bits:4096
+
+# Generate public key
+openssl rsa -pubout -in jwt-private.pem -out jwt-public.pem
+
+# Convert keys to base64 and add to .env file
+echo "JWT_PRIVATE_KEY=$(cat jwt-private.pem | base64)" >> .env
+echo "JWT_PUBLIC_KEY=$(cat jwt-public.pem | base64)" >> .env
+```
+
 Update the following variables in `.env`:
 
 - `DATABASE_URL`: Your PostgreSQL connection string

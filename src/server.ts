@@ -9,6 +9,7 @@ import {
 } from "fastify-type-provider-zod";
 
 import type { Services } from "./db.js";
+import type { Env } from "./env.js";
 
 import { initDB } from "./db.js";
 import { customerRouter } from "./modules/customers/customer.route.js";
@@ -23,10 +24,10 @@ declare module "fastify" {
   }
 }
 
-export async function bootstrap(port = 3000, migrate = true) {
+export async function bootstrap(env: Env) {
   const db = await initDB();
 
-  if (migrate) {
+  if (env.DATABASE_MIGRATE) {
     await db.orm.migrator.up();
   }
 
@@ -37,9 +38,14 @@ export async function bootstrap(port = 3000, migrate = true) {
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
-  // register JWT plugin
   app.register(fastifyJWT, {
-    secret: process.env.JWT_SECRET ?? "12345678", // fallback for testing
+    secret: {
+      public: env.JWT_PUBLIC_KEY,
+      private: env.JWT_PRIVATE_KEY,
+    },
+    sign: {
+      algorithm: "RS256",
+    },
   });
 
   // register request context hook
@@ -81,8 +87,8 @@ export async function bootstrap(port = 3000, migrate = true) {
   app.setErrorHandler((err, req, reply) => {
     if (hasZodFastifySchemaValidationErrors(err)) {
       return reply.code(400).send({
-        error: "Response Validation Error",
-        message: "Request doesn't match the schema",
+        error: "Bad Request",
+        message: "Invalid request parameters",
         statusCode: 400,
         details: {
           issues: err.validation,
@@ -119,7 +125,7 @@ export async function bootstrap(port = 3000, migrate = true) {
   app.register(saleRouter, { prefix: "/api/v1/sales" });
   app.register(userRoutes, { prefix: "/api/v1/users" });
 
-  const url = await app.listen({ port });
+  const url = await app.listen({ port: env.PORT });
 
   return { app, url };
 }
