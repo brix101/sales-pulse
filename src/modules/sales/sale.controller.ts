@@ -2,7 +2,6 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 
 import type { GetSalesQueryString } from "./sale.schema.js";
 
-import { logger } from "../../utils/logger.js";
 import { getSales } from "./sale.service.js";
 
 export async function getSalesHandler(
@@ -19,7 +18,7 @@ export async function getSalesHandler(
       ...result,
     });
   } catch (error) {
-    logger.error(error);
+    request.log.error(error);
     return reply.status(500).send({ message: "Something went wrong" });
   }
 }
