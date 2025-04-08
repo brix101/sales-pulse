@@ -1,7 +1,7 @@
-import type { QueryString } from "../../common/schema.js";
+import type { QueryStringType } from "../../common/schema.js";
 import type { Services } from "../../db.js";
 
-export async function getProducts(db: Services, query: QueryString) {
+export async function getProducts(db: Services, query: QueryStringType) {
   const limit = query.limit || 10;
   const offset = (query.page - 1) * limit;
 

@@ -1,24 +1,21 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import type { QueryString } from "../../common/schema.js";
+import type { QueryStringType } from "../../common/schema.js";
 
-import { queryStringSchema } from "../../common/schema.js";
 import { logger } from "../../utils/logger.js";
 import { getProducts } from "./product.service.js";
 
 export async function getProductsHandler(
   request: FastifyRequest<{
-    Querystring: QueryString;
+    Querystring: QueryStringType;
   }>,
   reply: FastifyReply,
 ) {
   try {
-    const query = queryStringSchema.parse(request.query);
-
-    const result = await getProducts(request.db, query);
+    const result = await getProducts(request.db, request.query);
 
     return reply.status(200).send({
-      ...query,
+      ...request.query,
       ...result,
     });
   } catch (error) {

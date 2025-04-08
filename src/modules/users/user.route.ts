@@ -10,29 +10,18 @@ import {
 import { loginSchema, signupSchema } from "./user.schema.js";
 
 export function userRoutes(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().post(
-    "/login",
-    {
-      schema: {
-        body: loginSchema,
-      },
-    },
-    loginUserHandler,
-  );
+  app.withTypeProvider<ZodTypeProvider>().post("/login", {
+    schema: { body: loginSchema },
+    handler: loginUserHandler,
+  });
 
-  app.withTypeProvider<ZodTypeProvider>().post(
-    "/signup",
-    {
-      schema: { body: signupSchema },
-    },
-    signupUserHandler,
-  );
+  app.withTypeProvider<ZodTypeProvider>().post("/signup", {
+    schema: { body: signupSchema },
+    handler: signupUserHandler,
+  });
 
-  app.get(
-    "/me",
-    {
-      onRequest: verifyJWT,
-    },
-    getMeHandler,
-  );
+  app.get("/me", {
+    preHandler: verifyJWT,
+    handler: getMeHandler,
+  });
 }
