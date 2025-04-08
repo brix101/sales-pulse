@@ -16,8 +16,13 @@ export async function loginUserHandler(
   try {
     const user = await loginUser(request.db, request.body);
 
+    const token = await reply.jwtSign(
+      { id: user.id, email: user.email },
+      { sign: { expiresIn: "15m" } },
+    );
+
     return reply.status(200).send({
-      message: "User logged in successfully",
+      token,
       user,
     });
   } catch (error) {
@@ -57,9 +62,13 @@ export async function signupUserHandler(
 ) {
   try {
     const user = await signupUser(request.db, request.body);
+    const token = await reply.jwtSign(
+      { id: user.id, email: user.email },
+      { sign: { expiresIn: "15m" } },
+    );
 
     return reply.status(201).send({
-      message: "User created successfully",
+      token,
       user,
     });
   } catch (error) {

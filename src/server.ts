@@ -1,3 +1,4 @@
+import fastifyJWT from "@fastify/jwt";
 import { RequestContext } from "@mikro-orm/core";
 import Fastify from "fastify";
 import {
@@ -35,6 +36,11 @@ export async function bootstrap(port = 3000, migrate = true) {
 
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
+
+  // register JWT plugin
+  app.register(fastifyJWT, {
+    secret: process.env.JWT_SECRET ?? "12345678", // fallback for testing
+  });
 
   // register request context hook
   app.addHook("onRequest", (_request, _reply, done) => {
