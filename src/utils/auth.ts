@@ -1,4 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyReply, FastifyRequest } from "fastify";
+
+import type { MeRequest } from "../modules/users/user.schema.js";
 
 /**
  * Middleware to verify JWT token
@@ -9,21 +11,18 @@ export const verifyJWT = (
   reply: FastifyReply,
   done: () => void,
 ) => {
-  request.jwtVerify((err) => {
-    if (err) {
-      reply.status(401).send({
-        message: "Unauthorized",
-        details: {
-          issues: {
-            path: ["token"],
-            message: "Invalid or expired token",
-          },
-          method: request.method,
-          url: request.url,
+  const user = request.user as MeRequest;
+  if (!user.id) {
+    reply.status(401).send({
+      message: "Unauthorized",
+      details: {
+        issues: {
+          path: ["token"],
+          message: "Invalid or expired token",
         },
-      });
-      return;
-    }
-    done();
-  });
+      },
+    });
+    return;
+  }
+  done();
 };

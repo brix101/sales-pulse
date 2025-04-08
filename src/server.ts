@@ -47,6 +47,21 @@ export async function bootstrap(port = 3000, migrate = true) {
     RequestContext.create(db.em, done);
   });
 
+  // register JWT hook
+  app.addHook("onRequest", (request, _reply, done) => {
+    request
+      .jwtVerify()
+      .then((user) => {
+        request.user = user;
+      })
+      .catch(() => {
+        request.user = {};
+      })
+      .finally(() => {
+        done();
+      });
+  });
+
   app.addHook("preHandler", (request, _reply, done) => {
     request.db = db;
     done();
