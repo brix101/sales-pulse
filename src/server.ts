@@ -9,9 +9,9 @@ import {
 } from "fastify-type-provider-zod";
 
 import type { Services } from "./db.js";
+import type { Env } from "./env.js";
 
 import { initDB } from "./db.js";
-import { Env } from "./env.js";
 import { customerRouter } from "./modules/customers/customer.route.js";
 import { productRouter } from "./modules/products/product.route.js";
 import { saleRouter } from "./modules/sales/sale.route.js";
