@@ -101,6 +101,49 @@ pnpm start
   - `pnpm orm schema:update`: Update database schema
   - `pnpm orm schema:fresh`: Drop and recreate database schema
 
+## API Documentation and Testing
+
+The project includes a Postman collection for testing the API endpoints. The collection is located in `postman_collection.json` at the root of the project.
+
+### Available Endpoints
+
+- **Authentication**
+
+  - `POST /api/v1/users/signup` - Register a new user
+  - `POST /api/v1/users/login` - Login user
+  - `GET /api/v1/users/me` - Get current user profile
+
+- **Sales**
+
+  - `GET /api/v1/sales` - Get sales data
+    - Query Parameters:
+      - `customerId` (optional) - Filter by customer ID
+      - `month` (optional) - Filter by month (format: YYYY-MM)
+      - `page` (optional) - Page number (default: 1)
+      - `limit` (optional) - Items per page (default: 10)
+
+- **Customers**
+
+  - `GET /api/v1/customers` - Get list of customers
+    - Query Parameters:
+      - `page` (optional) - Page number (default: 1)
+      - `limit` (optional) - Items per page (default: 10)
+
+- **Products**
+  - `GET /api/v1/products` - Get list of products
+    - Query Parameters:
+      - `page` (optional) - Page number (default: 1)
+      - `limit` (optional) - Items per page (default: 10)
+
+### Using the Postman Collection
+
+1. Import the `postman_collection.json` file into Postman
+2. Set up your environment variables:
+   - `baseUrl`: Your API base URL (default: http://localhost:3000)
+   - `token`: JWT token received after login (automatically set after successful login)
+3. Start with the authentication endpoints to get your token
+4. Use the token for authenticated requests
+
 ## Docker Support
 
 The project includes Docker Compose configuration for the PostgreSQL database. To use it:
