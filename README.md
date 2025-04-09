@@ -38,8 +38,9 @@ openssl genpkey -algorithm RSA -out jwt-private.pem -pkeyopt rsa_keygen_bits:409
 openssl rsa -pubout -in jwt-private.pem -out jwt-public.pem
 
 # Convert keys to base64 and add to .env file
-echo "JWT_PRIVATE_KEY=$(cat jwt-private.pem | base64)" >> .env
-echo "JWT_PUBLIC_KEY=$(cat jwt-public.pem | base64)" >> .env
+echo "JWT_PRIVATE_KEY=$(base64 -w 0 jwt-private.pem)" >> .env
+echo "JWT_PUBLIC_KEY=$(base64 -w 0 jwt-public.pem)" >> .env
+
 ```
 
 Update the following variables in `.env`:
